@@ -29,8 +29,8 @@ const journeys = require('db-hafas')('baahn').journeys;
  * @typedef {object} Options
  * @property {Date} [departure=new Date()]
  * @property {Date} [arrival=null]
- * @property {number} [results=null] - number of journeys – `null` means "whatever HAFAS returns"
- * @property {number} [stopovers=false] - return stations on the way?
+ * @property {?number} [results=null] - number of journeys – `null` means "whatever HAFAS returns"
+ * @property {boolean} [stopovers=false] - return stations on the way?
  * @property {number} [transfers=-1] - Maximum nr of transfers. Default: Let HAFAS decide.
  * @property {number} [transferTime=0] - minimum time for a single transfer in minutes
  * @property {('none'|'partial'|'complete')} [accessibility='none']
