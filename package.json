@@ -1,0 +1,20 @@
+{
+  "name": "@roehrt/baahn",
+  "version": "1.0.0",
+  "description": "Utility to find cheaper prices for 'Deutsche Bahn' journeys",
+  "main": "index.js",
+  "keywords": [
+    "deutsche bahn",
+    "price",
+    "db"
+  ],
+  "author": "Tobias Roehr",
+  "license": "ISC",
+  "repository": "git://github.com/roehrt/baahn.git",
+  "devDependencies": {
+    "eslint": "^7.22.0"
+  },
+  "dependencies": {
+    "db-hafas": "^5.0.2"
+  }
+}
