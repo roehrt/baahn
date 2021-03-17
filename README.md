@@ -8,8 +8,15 @@ for fetching information about journeys. Be sure to have a permission for
 using this module.
 
 ## Installation
+Switch the registry to `https://npm.pkg.github.com` by adding these
+lines to your `.npmrc`.
+```
+@roehrt:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=<your token>
+```
+Install the package with:
 ```shell
-npm i git+ssh://git@github.com/roehrt/baaahn.git
+npm i @roehrt/baahn
 ```
 That's it.
 
@@ -17,7 +24,7 @@ That's it.
 Only the method `findJourneys` is exported and can be used.
 
 ```javascript
-const findJourneys = require('baahn');
+const findJourneys = require('@roehrt/baahn');
 findJourneys('8011160', '8010224').then((data) => {
   console.log(require('util').inspect(data, {depth: null, colors: true}))
 });
@@ -30,4 +37,4 @@ Those stations have a different station id.
 
 ## See Also
 
-`baahn-cli` - a simple cli wrapper for this module.
+[`baahn-cli`](https://github.com/roehrt/baahn-cli) - a simple cli wrapper for this module.
