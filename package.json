@@ -19,6 +19,6 @@
     "eslint": "^7.22.0"
   },
   "dependencies": {
-    "db-hafas": "^5.0.2"
+    "hafas-client": "^5.15.1"
   }
 }
