@@ -61,11 +61,6 @@ const journeys = require('db-hafas')('baahn').journeys;
  */
 
 /**
- * A string representing a specific journey through time and stops
- * @typedef {string} JourneyString
- */
-
-/**
  * A HashMap of journeys
  * @typedef {Object.<JourneyString, object>} JourneyMap
  */
