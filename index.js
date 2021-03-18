@@ -26,28 +26,29 @@ const journeys = require('db-hafas')('baahn').journeys;
  */
 
 /**
- * @typedef {object} Options
- * @property {Date} [departure=new Date()]
- * @property {Date} [arrival=null]
- * @property {?number} [results=null] - number of journeys – `null` means "whatever HAFAS returns"
- * @property {boolean} [stopovers=false] - return stations on the way?
- * @property {number} [transfers=-1] - Maximum nr of transfers. Default: Let HAFAS decide.
- * @property {number} [transferTime=0] - minimum time for a single transfer in minutes
- * @property {('none'|'partial'|'complete')} [accessibility='none']
- * @property {boolean} [bike=false] - only bike-friendly journeys
- * @property {('slow'|'normal'|'fast')} [walkingSpeed='normal']
+ * @typedef {object} Options - Specifies options to restrict HAFAS search.
+ * @property {?Date} [departure=new Date()] - Start time of the journey. Cannot be used with `arrival`.
+ * @property {?Date} [arrival=null] - End time of the journey. Cannot be used with `departure`.
+ * @property {?number} [results=null] - Number of journeys – `null` means "whatever HAFAS returns"
+ * @property {boolean} [stopovers=false] - Return stations on the way?
+ * @property {number} [transfers=-1] - Maximum number of transfers. Default: Let HAFAS decide.
+ * @property {number} [transferTime=0] - Minimum time for a single transfer in minutes.
+ * @property {('none'|'partial'|'complete')} [accessibility='none'] - Only journeys with specified accessibility.
+ * @property {boolean} [bike=false] - Only bike-friendly journeys?
+ * @property {('slow'|'normal'|'fast')} [walkingSpeed='normal'] - Walking speed HAFAS should use for calculations.
  * @property {boolean} [startWithWalking=true] - Consider walking to nearby stations at the beginning of a journey?
- * @property {Products} [products]
- * @property {boolean} [tickets=false] - return tickets? only available with some profiles
- * @property {boolean} [polylines=false] - return a shape for each leg?
- * @property {boolean} [subStops=true] - parse & expose sub-stops of stations?
- * @property {boolean} [entrances=true] - parse & expose entrances of stops/stations?
- * @property {boolean} [remarks=true] - parse & expose hints & warnings?
- * @property {boolean} [scheduledDays=false] - parse which days each journey is valid on
- * @property {string} [language='en'] - language to get results in
- * @see {@link https://github.com/public-transport/hafas-client/blob/5/docs/journeys.md|hafas-client}
- * @see {@link https://github.com/public-transport/hafas-client/blob/5/p/db/readme.md|db-hafas}
-}
+ * @property {Products} [products={}] - Products HAFAS is allowed to use.
+ * @property {boolean} [tickets=false] - Return tickets?
+ * @property {boolean} [polylines=false] - Return a shape for each leg?
+ * @property {boolean} [subStops=true] - Parse & expose sub-stops of stations?
+ * @property {boolean} [entrances=true] - Parse & expose entrances of stops/stations?
+ * @property {boolean} [remarks=true] - Parse & expose hints & warnings?
+ * @property {boolean} [scheduledDays=false] - Parse which days each journey is valid on.
+ * @property {string} [language='en'] - Language to get results in.
+ * @see {@link https://github.com/public-transport/hafas-client/blob/5/docs/journeys.md|hafas-client} for general
+ * HAFAS documentation
+ * @see {@link https://github.com/public-transport/hafas-client/blob/5/p/db/readme.md|db-hafas} for DB-specific
+ * documentation
  */
 
 /**
