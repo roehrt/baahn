@@ -13,7 +13,8 @@
 
 
 const adjacencyList = require('./static/adjacencyList.json');
-const journeys = require('db-hafas')('baahn').journeys;
+const journeys = require('hafas-client')(require('hafas-client/p/db'), 'baahn').journeys;
+const loyaltyCards = require('hafas-client/p/db/loyalty-cards').data;
 
 /**
  * Possible products for a journey.
@@ -50,6 +51,8 @@ const journeys = require('db-hafas')('baahn').journeys;
  * @property {boolean} [remarks=true] - Parse & expose hints & warnings?
  * @property {boolean} [scheduledDays=false] - Parse which days each journey is valid on.
  * @property {string} [language='en'] - Language to get results in.
+ * @property {?number} [loyaltyCard=null] - BahnCard discount in percent.
+ * @property {boolean} [firstClass=false] - Travel with first class?
  * @see {@link https://github.com/public-transport/hafas-client/blob/5/docs/journeys.md|hafas-client} for general
  * HAFAS documentation
  * @see {@link https://github.com/public-transport/hafas-client/blob/5/p/db/readme.md|db-hafas} for DB-specific
@@ -156,6 +159,12 @@ function updateHashMap(hashMap, journey, from, to) {
  * @see {@link https://github.com/public-transport/hafas-client/blob/5/docs/journeys.md|hafas-client}
  */
 exports.findJourneys = async function (from, to, opt = {}) {
+	// Transform BahnCard discount for db-hafas
+	if (opt.loyaltyCard) {
+		opt.loyaltyCard = {type: loyaltyCards.BAHNCARD, discount: opt.loyaltyCard};
+	}
+
+	// "via" option cannot be used
 	opt.via = null;
 
 	const requests = [];
