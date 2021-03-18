@@ -1,12 +1,14 @@
 /**
  * This small package contains the implementation
  * of a trick which allows to save money when
- * booking a trip on {@link https://bahn.de|bahn.de}
+ * booking a trip on {@link https://bahn.de|bahn.de}.
  *
  * @projectname baahn
- * @version 1.0
+ * @version 1.0.0
  * @copyright 2020
  *
+ * Finds cheaper journeys.
+ * @module baahn
  */
 
 
@@ -14,7 +16,8 @@ const adjacencyList = require('./static/adjacencyList.json');
 const journeys = require('db-hafas')('baahn').journeys;
 
 /**
- * Possible products for a journey
+ * Possible products for a journey.
+ *
  * @typedef {object} Products
  * @property {boolean} [suburban=true]
  * @property {boolean} [subway=true]
@@ -26,7 +29,9 @@ const journeys = require('db-hafas')('baahn').journeys;
  */
 
 /**
- * @typedef {object} Options - Specifies options to restrict HAFAS search.
+ * Specifies options to restrict HAFAS search.
+ *
+ * @typedef {object} Options
  * @property {?Date} [departure=new Date()] - Start time of the journey. Cannot be used with `arrival`.
  * @property {?Date} [arrival=null] - End time of the journey. Cannot be used with `departure`.
  * @property {?number} [results=null] - Number of journeys – `null` means "whatever HAFAS returns"
@@ -52,22 +57,26 @@ const journeys = require('db-hafas')('baahn').journeys;
  */
 
 /**
- * A string containing the eva code of a station
+ * A string containing the eva code of a station.
+ *
  * @typedef {string} Station
  */
 
 /**
- * A string representing a specific journey through time and stops
+ * A string representing a specific journey through time and stops.
+ *
  * @typedef {string} JourneyString
  */
 
 /**
- * A HashMap of journeys
+ * A HashMap of journeys.
+ *
  * @typedef {Object.<JourneyString, object>} JourneyMap
  */
 
 /**
- * Creates identifiable string from legs of a journey
+ * Creates identifiable string from legs of a journey.
+ *
  * @param {object[]} legs - legs of journey
  * @returns {JourneyString} hash
  */
@@ -76,7 +85,8 @@ function createHash(legs) {
 }
 
 /**
- * Creates identifiable string from leg of a journey
+ * Creates identifiable string from leg of a journey.
+ *
  * @param {object} leg - leg of journey
  * @returns {JourneyString} hash
  */
@@ -86,7 +96,8 @@ function hashLeg(leg) {
 }
 
 /**
- * Returns adjacent stations in the German long-distance network
+ * Returns adjacent stations in the German long-distance network.
+ *
  * @param {Station} station - eva code of a station
  * @returns {Station[]} adjacent stations
  */
@@ -95,7 +106,8 @@ function nextStops(station) {
 }
 
 /**
- * Updates hashMap if cheaper price was found
+ * Updates hashMap if cheaper price was found.
+ *
  * @param {JourneyMap} hashMap
  * @param {object} journey
  * @param {Station} from
@@ -136,14 +148,14 @@ function updateHashMap(hashMap, journey, from, to) {
 
 /**
  * Finds cheaper prices for given journey.
- * For params see {@link https://github.com/public-transport/hafas-client/blob/5/docs/journeys.md|db-hafas}.
+ *
  * @param {Station} from - origin of journey
  * @param {Station} to - destination of journey
  * @param {Options} [opt={}] - journey options
  * @returns {Promise<object[]>}
- * @see {@link https://github.com/public-transport/hafas-client/blob/5/docs/journeys.md|db-hafas}
+ * @see {@link https://github.com/public-transport/hafas-client/blob/5/docs/journeys.md|hafas-client}
  */
-module.exports = async function findJourneys(from, to, opt = {}) {
+exports.findJourneys = async function (from, to, opt = {}) {
 	opt.via = null;
 
 	const requests = [];
