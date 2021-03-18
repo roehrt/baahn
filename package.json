@@ -10,6 +10,10 @@
   ],
   "author": "Tobias Roehr",
   "license": "ISC",
+  "files": [
+    "index.js",
+    "static/adjacencyList.json"
+  ],
   "repository": "git://github.com/roehrt/baahn.git",
   "devDependencies": {
     "eslint": "^7.22.0"
