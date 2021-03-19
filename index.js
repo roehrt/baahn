@@ -129,7 +129,7 @@ function updateHashMap(hashMap, journey, from, to) {
 
 	const append = [];
 	while (legs.length && legs[legs.length - 1].destination.id !== to) {
-		append.push(legs.pop());
+		append.unshift(legs.pop());
 	}
 
 	if (legs.length === 0) return; // something unexpected happen
