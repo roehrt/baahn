@@ -105,7 +105,7 @@ function hashLeg(leg) {
  * @returns {Station[]} adjacent stations
  */
 function nextStops(station) {
-	return adjacencyList[station];
+	return adjacencyList[station]||[];
 }
 
 /**
