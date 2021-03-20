@@ -192,7 +192,7 @@ exports.findJourneys = async function (from, to, opt = {}) {
 	// Original journeys
 	const originalResult = results.shift();
 	if (originalResult.status === 'rejected') {
-		throw Error('No journey found');
+		return [];
 	}
 
 	// Index journeys by hash
