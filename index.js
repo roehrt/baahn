@@ -19,7 +19,7 @@ const loyaltyCards = require('hafas-client/p/db/loyalty-cards').data;
 /**
  * Possible products for a journey.
  *
- * @typedef {object} Products
+ * @typedef {object} BaahnProducts
  * @property {boolean} [suburban=true]
  * @property {boolean} [subway=true]
  * @property {boolean} [tram=true]
@@ -32,7 +32,7 @@ const loyaltyCards = require('hafas-client/p/db/loyalty-cards').data;
 /**
  * Specifies options to restrict HAFAS search.
  *
- * @typedef {object} Options
+ * @typedef {object} BaahnOptions
  * @property {?Date} [departure=new Date()] - Start time of the journey. Cannot be used with `arrival`.
  * @property {?Date} [arrival=null] - End time of the journey. Cannot be used with `departure`.
  * @property {?number} [results=null] - Number of journeys – `null` means "whatever HAFAS returns"
@@ -43,7 +43,7 @@ const loyaltyCards = require('hafas-client/p/db/loyalty-cards').data;
  * @property {boolean} [bike=false] - Only bike-friendly journeys?
  * @property {('slow'|'normal'|'fast')} [walkingSpeed='normal'] - Walking speed HAFAS should use for calculations.
  * @property {boolean} [startWithWalking=true] - Consider walking to nearby stations at the beginning of a journey?
- * @property {Products} [products={}] - Products HAFAS is allowed to use.
+ * @property {BaahnProducts} [products={}] - Products HAFAS is allowed to use.
  * @property {boolean} [tickets=false] - Return tickets?
  * @property {boolean} [polylines=false] - Return a shape for each leg?
  * @property {boolean} [subStops=true] - Parse & expose sub-stops of stations?
@@ -62,26 +62,26 @@ const loyaltyCards = require('hafas-client/p/db/loyalty-cards').data;
 /**
  * A string containing the eva code of a station.
  *
- * @typedef {string} Station
+ * @typedef {string} BaahnStation
  */
 
 /**
  * A string representing a specific journey through time and stops.
  *
- * @typedef {string} JourneyString
+ * @typedef {string} BaahnJourneyString
  */
 
 /**
  * A HashMap of journeys.
  *
- * @typedef {Object.<JourneyString, object>} JourneyMap
+ * @typedef {Object.<BaahnJourneyString, object>} BaahnJourneyMap
  */
 
 /**
  * Creates identifiable string from legs of a journey.
  *
  * @param {object[]} legs - legs of journey
- * @returns {JourneyString} hash
+ * @returns {BaahnJourneyString} hash
  */
 function createHash(legs) {
 	return legs.map(hashLeg).join(':');
@@ -91,7 +91,7 @@ function createHash(legs) {
  * Creates identifiable string from leg of a journey.
  *
  * @param {object} leg - leg of journey
- * @returns {JourneyString} hash
+ * @returns {BaahnJourneyString} hash
  */
 function hashLeg(leg) {
 	return `${leg.origin.id}@${leg.plannedDeparture ?? leg.departure}>` +
@@ -101,8 +101,8 @@ function hashLeg(leg) {
 /**
  * Returns adjacent stations in the German long-distance network.
  *
- * @param {Station} station - eva code of a station
- * @returns {Station[]} adjacent stations
+ * @param {BaahnStation} station - eva code of a station
+ * @returns {BaahnStation[]} adjacent stations
  */
 function nextStops(station) {
 	return adjacencyList[station]||[];
@@ -111,10 +111,10 @@ function nextStops(station) {
 /**
  * Updates hashMap if cheaper price was found.
  *
- * @param {JourneyMap} hashMap
+ * @param {BaahnJourneyMap} hashMap
  * @param {object} journey
- * @param {Station} from
- * @param {Station} to
+ * @param {BaahnStation} from
+ * @param {BaahnStation} to
  */
 function updateHashMap(hashMap, journey, from, to) {
 	if (journey.price === null) return;
@@ -152,9 +152,9 @@ function updateHashMap(hashMap, journey, from, to) {
 /**
  * Finds cheaper prices for given journey.
  *
- * @param {Station} from - origin of journey
- * @param {Station} to - destination of journey
- * @param {Options} [opt={}] - journey options
+ * @param {BaahnStation} from - origin of journey
+ * @param {BaahnStation} to - destination of journey
+ * @param {BaahnOptions} [opt={}] - journey options
  * @returns {Promise<object[]>}
  * @see {@link https://github.com/public-transport/hafas-client/blob/5/docs/journeys.md|hafas-client}
  */
