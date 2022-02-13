@@ -4,7 +4,7 @@
  * booking a trip on {@link https://bahn.de|bahn.de}.
  *
  * @projectname baahn
- * @version 1.0.0
+ * @version 1.0.6
  * @copyright 2020
  *
  * Finds cheaper journeys.
