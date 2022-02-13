@@ -94,7 +94,7 @@ function hashLeg(leg) {
  * @param {object[]} legs - legs of journey
  * @returns {BaahnJourneyString} hash
  */
-function createHash(legs) {
+function hashLegs(legs) {
   return legs.map(hashLeg).join(':');
 }
 
@@ -104,24 +104,24 @@ function createHash(legs) {
  * @param {BaahnStation} station - eva code of a station
  * @returns {BaahnStation[]} adjacent stations
  */
-function nextStops(station) {
+function adjacentStation(station) {
   return adjacencyList[station] || [];
 }
 
 /**
- * Updates hashMap if cheaper price was found.
+ * Updates the journey map if journey contains a cheaper price.
  *
- * @param {BaahnJourneyMap} hashMap
+ * @param {BaahnJourneyMap} journeyMap
  * @param {object} journey
  * @param {BaahnStation} from
  * @param {BaahnStation} to
  */
-function updateHashMap(hashMap, journey, from, to) {
+function update(journeyMap, journey, from, to) {
   if (journey.price === null) return;
 
   const { legs } = journey;
 
-  // Remove the extensions of the journey
+  // Remove the extension from the journey
   const prepend = [];
   while (legs.length && legs[0].origin.id !== from) {
     prepend.push(legs.shift());
@@ -132,21 +132,58 @@ function updateHashMap(hashMap, journey, from, to) {
     append.unshift(legs.pop());
   }
 
-  if (legs.length === 0) return; // something unexpected happen
+  // Journey didn't contain the original connection
+  if (legs.length === 0) return;
 
-  // Fetch old journey
-  const hash = createHash(legs);
-  const oldJourney = hashMap[hash];
+  // Fetch current best journey
+  const hash = hashLegs(legs);
+  const oldJourney = journeyMap[hash];
 
-  // No improvement or not assignable
-  if (!oldJourney || !oldJourney.price.amount || oldJourney.price.amount <= journey.price.amount) return;
+  // Journey not found
+  // TODO: maybe insert the journey into the map even if it's not originally there?!
+  if (!oldJourney || !oldJourney.price.amount) return;
 
+  // No price improvement
+  if (oldJourney.price.amount <= journey.price.amount) return;
+
+  // Save how the money saving was achieved
   journey.trick = {
     prepend,
     append,
     oldPrice: oldJourney.price.amount,
   };
-  hashMap[hash] = journey;
+
+  journeyMap[hash] = journey;
+}
+
+/**
+ * Queries the original connection and possible longer/cheaper ones.
+ *
+ * @param {BaahnStation} from - origin of journey
+ * @param {BaahnStation} to - destination of journey
+ * @param {BaahnOptions} [opt={}] - journey options
+ * @returns {Promise<object[]>[]}
+ */
+function buildRequests(from, to, opt) {
+  const requests = [];
+  requests.push(journeys(from, to, opt));
+
+  // Extend the start of the journey
+  opt.via = from;
+  for (const newOrigin of adjacentStation(from)) {
+    from = newOrigin;
+    requests.push(journeys(from, to, opt));
+  }
+  from = opt.via;
+
+  // Extend the end of the journey
+  opt.via = to;
+  for (const newDestination of adjacentStation(to)) {
+    to = newDestination;
+    requests.push(journeys(from, to, opt));
+  }
+
+  return requests;
 }
 
 /**
@@ -172,50 +209,32 @@ exports.findJourneys = async function findJourneys(from, to, opt = {}) {
   // "via" option cannot be used
   opt.via = null;
 
-  const requests = [];
-  requests.push(journeys(from, to, opt));
+  const requests = buildRequests(from, to, opt);
+  const connections = await Promise.allSettled(requests);
 
-  // Extend the start of the journey
-  opt.via = from;
-  for (const stop of nextStops(from)) {
-    from = stop;
-    requests.push(journeys(from, to, opt));
-  }
-  from = opt.via;
-
-  // Extend the end of the journey
-  opt.via = to;
-  for (const stop of nextStops(to)) {
-    to = stop;
-    requests.push(journeys(from, to, opt));
-  }
-  to = opt.via;
-
-  // Await all results
-  const results = await Promise.allSettled(requests);
-
-  // Original journeys
-  const originalResult = results.shift();
-  if (originalResult.status === 'rejected') {
+  const originalConnection = connections.shift();
+  if (originalConnection.status === 'rejected') {
+    // There is no journey available
     return [];
   }
 
-  // Index journeys by hash
-  const hashMap = {};
-  for (const journey of originalResult.value.journeys) {
+  // Hash the journeys found so that we can later compare
+  // the extended connections with them more quickly.
+  const cheapestJourneys = {};
+  for (const journey of originalConnection.value.journeys) {
     if (!journey.price || !journey.price.amount) continue;
-    const hash = createHash(journey.legs);
-    hashMap[hash] = journey;
+    const hash = hashLegs(journey.legs);
+    cheapestJourneys[hash] = journey;
   }
 
-  // Check if longer journeys are cheaper
-  for (const result of results) {
-    if (result.status === 'fulfilled') {
-      for (const journey of result.value.journeys) {
-        updateHashMap(hashMap, journey, from, to);
+  // Check if the extended journeys are cheaper
+  for (const extendedConnections of connections) {
+    if (extendedConnections.status === 'fulfilled') {
+      for (const journey of extendedConnections.value.journeys) {
+        update(cheapestJourneys, journey, from, to);
       }
     }
   }
 
-  return Object.values(hashMap);
+  return Object.values(cheapestJourneys);
 };
