@@ -164,6 +164,11 @@ exports.findJourneys = async function findJourneys(from, to, opt = {}) {
     opt.loyaltyCard = { type: loyaltyCards.BAHNCARD, discount: opt.loyaltyCard };
   }
 
+  if (opt.via) {
+    // eslint-disable-next-line no-console
+    console.warn(`The 'via' option cannot be used. ${opt.via} was passed.`);
+  }
+
   // "via" option cannot be used
   opt.via = null;
 
