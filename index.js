@@ -11,10 +11,10 @@
  * @module baahn
  */
 
+const { journeys } = require('hafas-client')(require('hafas-client/p/db'), 'baahn');
+const loyaltyCards = require('hafas-client/p/db/loyalty-cards').data;
 
 const adjacencyList = require('./static/adjacencyList.json');
-const journeys = require('hafas-client')(require('hafas-client/p/db'), 'baahn').journeys;
-const loyaltyCards = require('hafas-client/p/db/loyalty-cards').data;
 
 /**
  * Possible products for a journey.
@@ -78,24 +78,24 @@ const loyaltyCards = require('hafas-client/p/db/loyalty-cards').data;
  */
 
 /**
- * Creates identifiable string from legs of a journey.
- *
- * @param {object[]} legs - legs of journey
- * @returns {BaahnJourneyString} hash
- */
-function createHash(legs) {
-	return legs.map(hashLeg).join(':');
-}
-
-/**
  * Creates identifiable string from leg of a journey.
  *
  * @param {object} leg - leg of journey
  * @returns {BaahnJourneyString} hash
  */
 function hashLeg(leg) {
-	return `${leg.origin.id}@${leg.plannedDeparture ?? leg.departure}>` +
-		`${leg.destination.id}@${leg.plannedArrival ?? leg.arrival}`;
+  return `${leg.origin.id}@${leg.plannedDeparture ?? leg.departure}>`
+    + `${leg.destination.id}@${leg.plannedArrival ?? leg.arrival}`;
+}
+
+/**
+ * Creates identifiable string from legs of a journey.
+ *
+ * @param {object[]} legs - legs of journey
+ * @returns {BaahnJourneyString} hash
+ */
+function createHash(legs) {
+  return legs.map(hashLeg).join(':');
 }
 
 /**
@@ -105,7 +105,7 @@ function hashLeg(leg) {
  * @returns {BaahnStation[]} adjacent stations
  */
 function nextStops(station) {
-	return adjacencyList[station]||[];
+  return adjacencyList[station] || [];
 }
 
 /**
@@ -117,36 +117,36 @@ function nextStops(station) {
  * @param {BaahnStation} to
  */
 function updateHashMap(hashMap, journey, from, to) {
-	if (journey.price === null) return;
+  if (journey.price === null) return;
 
-	const legs = journey.legs;
+  const { legs } = journey;
 
-	// Remove the extensions of the journey
-	const prepend = [];
-	while (legs.length && legs[0].origin.id !== from) {
-		prepend.push(legs.shift());
-	}
+  // Remove the extensions of the journey
+  const prepend = [];
+  while (legs.length && legs[0].origin.id !== from) {
+    prepend.push(legs.shift());
+  }
 
-	const append = [];
-	while (legs.length && legs[legs.length - 1].destination.id !== to) {
-		append.unshift(legs.pop());
-	}
+  const append = [];
+  while (legs.length && legs[legs.length - 1].destination.id !== to) {
+    append.unshift(legs.pop());
+  }
 
-	if (legs.length === 0) return; // something unexpected happen
+  if (legs.length === 0) return; // something unexpected happen
 
-	// Fetch old journey
-	const hash = createHash(legs);
-	const oldJourney = hashMap[hash];
+  // Fetch old journey
+  const hash = createHash(legs);
+  const oldJourney = hashMap[hash];
 
-	// No improvement or not assignable
-	if (!oldJourney || !oldJourney.price.amount || oldJourney.price.amount <= journey.price.amount) return;
+  // No improvement or not assignable
+  if (!oldJourney || !oldJourney.price.amount || oldJourney.price.amount <= journey.price.amount) return;
 
-	journey.trick = {
-		prepend,
-		append,
-		oldPrice: oldJourney.price.amount,
-	};
-	hashMap[hash] = journey;
+  journey.trick = {
+    prepend,
+    append,
+    oldPrice: oldJourney.price.amount,
+  };
+  hashMap[hash] = journey;
 }
 
 /**
@@ -158,59 +158,59 @@ function updateHashMap(hashMap, journey, from, to) {
  * @returns {Promise<object[]>}
  * @see {@link https://github.com/public-transport/hafas-client/blob/5/docs/journeys.md|hafas-client}
  */
-exports.findJourneys = async function (from, to, opt = {}) {
-	// Transform BahnCard discount for db-hafas
-	if (opt.loyaltyCard) {
-		opt.loyaltyCard = {type: loyaltyCards.BAHNCARD, discount: opt.loyaltyCard};
-	}
+exports.findJourneys = async function findJourneys(from, to, opt = {}) {
+  // Transform BahnCard discount for db-hafas
+  if (opt.loyaltyCard) {
+    opt.loyaltyCard = { type: loyaltyCards.BAHNCARD, discount: opt.loyaltyCard };
+  }
 
-	// "via" option cannot be used
-	opt.via = null;
+  // "via" option cannot be used
+  opt.via = null;
 
-	const requests = [];
-	requests.push(journeys(from, to, opt));
+  const requests = [];
+  requests.push(journeys(from, to, opt));
 
-	// Extend the start of the journey
-	opt.via = from;
-	for (const stop of nextStops(from)) {
-		from = stop;
-		requests.push(journeys(from, to, opt));
-	}
-	from = opt.via;
+  // Extend the start of the journey
+  opt.via = from;
+  for (const stop of nextStops(from)) {
+    from = stop;
+    requests.push(journeys(from, to, opt));
+  }
+  from = opt.via;
 
-	// Extend the end of the journey
-	opt.via = to;
-	for (const stop of nextStops(to)) {
-		to = stop;
-		requests.push(journeys(from, to, opt));
-	}
-	to = opt.via;
+  // Extend the end of the journey
+  opt.via = to;
+  for (const stop of nextStops(to)) {
+    to = stop;
+    requests.push(journeys(from, to, opt));
+  }
+  to = opt.via;
 
-	// Await all results
-	const results = await Promise.allSettled(requests);
+  // Await all results
+  const results = await Promise.allSettled(requests);
 
-	// Original journeys
-	const originalResult = results.shift();
-	if (originalResult.status === 'rejected') {
-		return [];
-	}
+  // Original journeys
+  const originalResult = results.shift();
+  if (originalResult.status === 'rejected') {
+    return [];
+  }
 
-	// Index journeys by hash
-	const hashMap = {};
-	for (const journey of originalResult.value.journeys) {
-		if (!journey.price || !journey.price.amount) continue;
-		const hash = createHash(journey.legs);
-		hashMap[hash] = journey;
-	}
+  // Index journeys by hash
+  const hashMap = {};
+  for (const journey of originalResult.value.journeys) {
+    if (!journey.price || !journey.price.amount) continue;
+    const hash = createHash(journey.legs);
+    hashMap[hash] = journey;
+  }
 
-	// Check if longer journeys are cheaper
-	for (const result of results) {
-		if (result.status === 'fulfilled') {
-			for (const journey of result.value.journeys) {
-				updateHashMap(hashMap, journey, from, to);
-			}
-		}
-	}
+  // Check if longer journeys are cheaper
+  for (const result of results) {
+    if (result.status === 'fulfilled') {
+      for (const journey of result.value.journeys) {
+        updateHashMap(hashMap, journey, from, to);
+      }
+    }
+  }
 
-	return Object.values(hashMap);
+  return Object.values(hashMap);
 };
