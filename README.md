@@ -4,12 +4,11 @@ This small package contains the implementation of a trick which allows saving mo
 on [bahn.de](https://bahn.de).
 
 It uses [`hafas-client`](https://github.com/public-transport/hafas-client)
-for fetching information about journeys. Be sure to have a permission for
-using this module.
+for fetching information about journeys.
 
 ## Installation
 Switch the registry to `https://npm.pkg.github.com` by adding these
-lines to your `.npmrc`.
+lines to your `.npmrc`. Currently, you will need an access token to install this package. 
 ```
 @roehrt:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=<your token>
