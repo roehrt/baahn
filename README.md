@@ -23,7 +23,7 @@ That's it.
 Only the method `findJourneys` is exported and can be used.
 
 ```javascript
-const findJourneys = require('@roehrt/baahn');
+const { findJourneys } = require('@roehrt/baahn');
 findJourneys('8011160', '8010224').then((data) => {
   console.log(require('util').inspect(data, {depth: null, colors: true}))
 });
