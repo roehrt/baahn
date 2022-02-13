@@ -1,9 +1,17 @@
 # Baahn! 🚂
 
 `baahn` lets you find special connections saving money
-when travelling with [Deutsche Bahn](https://bahn.de).
-It uses [`hafas-client`] (huge thanks!) under the hood for
+when travelling with [Deutsche Bahn (DB)](https://bahn.de).
+It's using [`hafas-client`] (huge thanks!) under the hood for
 fetching information about the journeys.
+
+Suppose you want to travel from `Berlin Hbf` to `Magdeburg Hbf`.
+This package finds a longer journey that contains the actual journey
+but is actually cheaper (yep, the DB price system is weeeird).
+
+The output of the `baahn` web app:
+
+![baahn web app in action](cheaper_journey.png)
 
 ## Installation
 Currently, you need an access token to install this package 😔.
