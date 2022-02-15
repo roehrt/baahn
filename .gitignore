@@ -1,6 +1,9 @@
 # Dependency directories
 node_modules/
 
+# Tarballs
+*.tgz
+
 # Output files
 *.d.ts
 *.js
