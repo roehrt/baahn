@@ -1,3 +1,5 @@
+// @ts-ignore
+
 /**
  * This small package contains the implementation
  * of a trick which allows to save money when
@@ -203,7 +205,8 @@ const defaultOptions: JourneysOptions = {
  * @returns {Promise<BaahnJourney[]>}
  * @see {@link https://github.com/public-transport/hafas-client/blob/5/docs/journeys.md|hafas-client}
  */
-async function findJourneys(
+// eslint-disable-next-line import/prefer-default-export
+export async function findJourneys(
   from: BaahnStation,
   to: BaahnStation,
   opt: JourneysOptions = defaultOptions,
@@ -253,5 +256,3 @@ async function findJourneys(
 
   return Object.values(cheapestJourneys);
 }
-
-export default findJourneys;
