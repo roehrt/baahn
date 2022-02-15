@@ -18,8 +18,6 @@ import hafasClient, {
 } from 'hafas-client';
 // @ts-ignore
 import dbProfile from 'hafas-client/p/db';
-// @ts-ignore
-import { data as loyaltyCards } from 'hafas-client/p/db/loyalty-cards';
 
 import adjacencyList from './static/stationGraph.json';
 
@@ -169,33 +167,6 @@ function buildRequests(from: BaahnStation, to: BaahnStation, opt: JourneysOption
   return requests;
 }
 
-const defaultOptions: JourneysOptions = {
-  stopovers: false,
-  transfers: -1,
-  transferTime: 0,
-  accessibility: 'none',
-  bike: false,
-  walkingSpeed: 'normal',
-  startWithWalking: true,
-  products: {
-    suburban: true,
-    subway: true,
-    tram: true,
-    bus: true,
-    ferry: true,
-    express: true,
-    regional: true,
-  },
-  tickets: false,
-  polylines: false,
-  subStops: true,
-  entrances: true,
-  remarks: true,
-  scheduledDays: false,
-  language: 'en',
-  firstClass: false,
-};
-
 /**
  * Finds cheaper prices for given journey.
  *
@@ -209,24 +180,17 @@ const defaultOptions: JourneysOptions = {
 export async function findJourneys(
   from: BaahnStation,
   to: BaahnStation,
-  opt: JourneysOptions = defaultOptions,
+  opt: JourneysOptions = {},
 ): Promise<BaahnJourney[]> {
-  const config = Object.assign(opt, defaultOptions);
-
-  // Transform BahnCard discount for db-hafas
-  if (typeof config.loyaltyCard === 'number') {
-    config.loyaltyCard = { type: loyaltyCards.BAHNCARD, discount: config.loyaltyCard };
-  }
-
-  if (config.via) {
+  if (opt.via) {
     // eslint-disable-next-line no-console
-    console.warn(`The 'via' option cannot be used. ${config.via} was passed.`);
+    console.warn(`The 'via' option cannot be used. ${opt.via} was passed.`);
   }
 
   // "via" option cannot be used
-  config.via = undefined;
+  opt.via = undefined;
 
-  const requests = buildRequests(from, to, config);
+  const requests = buildRequests(from, to, opt);
   const connections = await Promise.allSettled(requests);
 
   if (connections.length === 0) return [];
