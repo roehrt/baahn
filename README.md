@@ -36,7 +36,7 @@ findJourneys('8011160', '8010224').then((data) => {
 });
 ```
 
-More information on how to use `findJourneys` can be found in [`index.js`](index.js).
+More information on how to use `findJourneys` can be found in [`index.ts`](index.ts).
 For finding the station ids [`hafas-client`] is recommended.
 For everyday use consider using the [`baahn-cli`] package.
 
