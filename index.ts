@@ -1,5 +1,3 @@
-// @ts-ignore
-
 /**
  * This small package contains the implementation
  * of a trick which allows to save money when
