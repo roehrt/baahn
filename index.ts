@@ -17,7 +17,7 @@ import dbProfile from 'hafas-client/p/db';
 // @ts-ignore
 import { data as loyaltyCards } from 'hafas-client/p/db/loyalty-cards';
 
-import adjacencyList from './static/adjacencyList.json';
+import adjacencyList from './static/stationGraph.json';
 
 const { journeys } = hafasClient(dbProfile, 'baahn');
 

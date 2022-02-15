@@ -20,7 +20,7 @@
     "index.d.ts",
     "index.ts",
     "index.js",
-    "static/adjacencyList.json"
+    "static/stationGraph.json"
   ],
   "repository": "git://github.com/roehrt/baahn.git",
   "devDependencies": {
