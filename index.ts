@@ -11,7 +11,9 @@
  * @module baahn
  */
 
-import hafasClient, {Journey, Journeys, JourneysOptions, Leg} from 'hafas-client';
+import hafasClient, {
+  Journey, Journeys, JourneysOptions, Leg,
+} from 'hafas-client';
 // @ts-ignore
 import dbProfile from 'hafas-client/p/db';
 // @ts-ignore
@@ -53,7 +55,6 @@ type BaahnJourneyMap = { [key: string]: BaahnJourney };
  * train network.
  */
 type StationGraph = { [key: string]: BaahnStation[] };
-
 
 /**
  * Creates identifiable string from leg of a journey.
@@ -202,7 +203,11 @@ const defaultOptions: JourneysOptions = {
  * @returns {Promise<BaahnJourney[]>}
  * @see {@link https://github.com/public-transport/hafas-client/blob/5/docs/journeys.md|hafas-client}
  */
-async function findJourneys(from: BaahnStation, to: BaahnStation, opt: JourneysOptions = defaultOptions): Promise<BaahnJourney[]> {
+async function findJourneys(
+  from: BaahnStation,
+  to: BaahnStation,
+  opt: JourneysOptions = defaultOptions,
+): Promise<BaahnJourney[]> {
   const config = Object.assign(opt, defaultOptions);
 
   // Transform BahnCard discount for db-hafas
