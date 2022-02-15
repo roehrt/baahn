@@ -17,6 +17,8 @@
   "author": "Tobias Roehr",
   "license": "ISC",
   "files": [
+    "index.d.ts",
+    "index.ts",
     "index.js",
     "static/adjacencyList.json"
   ],
