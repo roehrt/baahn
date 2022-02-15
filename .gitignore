@@ -1,6 +1,11 @@
 # Dependency directories
 node_modules/
 
+# Output files
+*.d.ts
+*.js
+*.js.map
+
 # Optional npm cache directory
 .npm
 

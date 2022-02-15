@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "declaration": true,
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "es5",
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
