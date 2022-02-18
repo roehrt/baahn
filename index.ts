@@ -1,16 +1,3 @@
-/**
- * This small package contains the implementation
- * of a trick which allows to save money when
- * booking a trip on {@link https://bahn.de|bahn.de}.
- *
- * @projectname baahn
- * @version 1.0.7
- * @copyright 2022
- *
- * Finds cheaper journeys.
- * @module baahn
- */
-
 import hafasClient, {
   Journey, Journeys, JourneysOptions, Leg,
 } from 'hafas-client';
