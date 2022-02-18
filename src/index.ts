@@ -116,7 +116,7 @@ function update(journeyMap: BaahnJourneyMap, journey: BaahnJourney, from: BaahnS
   journey.trick = {
     prepend,
     append,
-    oldPrice: oldJourney.price.amount,
+    oldPrice: oldJourney.trick?.oldPrice ?? oldJourney.price.amount,
   };
 
   journeyMap[hash] = journey;
