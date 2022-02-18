@@ -21,6 +21,10 @@
     "static/"
   ],
   "repository": "git://github.com/roehrt/baahn.git",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "devDependencies": {
     "@types/hafas-client": "^5.22.0",
     "@types/node": "^17.0.18",
