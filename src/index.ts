@@ -12,7 +12,7 @@ const { journeys } = createClient(dbProfile, 'baahn');
  * A journey with an extra attribute `trick`
  * which stores how the price saving was achieved
  */
-interface BaahnJourney extends Journey {
+export interface BaahnJourney extends Journey {
   trick?: {
     prepend: Leg[],
     append: Leg[],
@@ -23,7 +23,7 @@ interface BaahnJourney extends Journey {
 /**
  * A string containing the eva code of a station.
  */
-type BaahnStation = string;
+export type BaahnStation = string;
 
 /**
  * An identifier representing a specific journey based on it's stops (and the time of the stops).
