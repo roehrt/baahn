@@ -11,7 +11,7 @@ but is actually cheaper (yep, the DB price system is weeeird).
 
 The output of the `baahn` web app:
 
-![baahn web app in action](cheaper_journey.png)
+![baahn web app in action](https://github.com/roehrt/baahn/blob/main/cheaper_journey.png?raw=true)
 
 ## Installation
 
