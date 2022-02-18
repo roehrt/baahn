@@ -14,15 +14,7 @@ The output of the `baahn` web app:
 ![baahn web app in action](cheaper_journey.png)
 
 ## Installation
-Currently, you need an access token to install this package 😔.
-If you have one, add the GitHub Package registry (where this package
-is published) to your `.npmrc`.
-```
-@roehrt:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=<your token>
-```
 
-Install the package with:
 ```shell
 npm i @roehrt/baahn
 ```
@@ -36,7 +28,7 @@ findJourneys('8011160', '8010224').then((data) => {
 });
 ```
 
-More information on how to use `findJourneys` can be found in [`index.ts`](index.ts).
+More information on how to use `findJourneys` can be found in [`index.ts`](src/index.ts).
 For finding the station ids [`hafas-client`] is recommended.
 For everyday use consider using the [`baahn-cli`] package.
 
