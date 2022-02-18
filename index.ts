@@ -141,7 +141,7 @@ function update(journeyMap: BaahnJourneyMap, journey: BaahnJourney, from: BaahnS
  * @param {BaahnStation} from - origin of journey
  * @param {BaahnStation} to - destination of journey
  * @param {JourneysOptions} [opt] - journey options
- * @returns {Promise<Journeys[]>[]}
+ * @returns {Promise<Journeys>[]}
  */
 function buildRequests(from: BaahnStation, to: BaahnStation, opt: JourneysOptions = {}): Promise<Journeys>[] {
   const requests = [];
