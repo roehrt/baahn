@@ -2,8 +2,8 @@
   "name": "@roehrt/baahn",
   "version": "1.0.7",
   "description": "Utility to find cheaper prices for 'Deutsche Bahn' journeys",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
   "keywords": [
     "deutsche bahn",
     "price",
@@ -17,10 +17,8 @@
   "author": "Tobias Roehr",
   "license": "ISC",
   "files": [
-    "index.d.ts",
-    "index.ts",
-    "index.js",
-    "static/stationGraph.json"
+    "src/",
+    "static/"
   ],
   "repository": "git://github.com/roehrt/baahn.git",
   "devDependencies": {
