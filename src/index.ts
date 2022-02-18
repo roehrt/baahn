@@ -1,4 +1,4 @@
-import hafasClient, {
+import createClient, {
   Journey, Journeys, JourneysOptions, Leg,
 } from 'hafas-client';
 // @ts-ignore
@@ -6,7 +6,7 @@ import dbProfile from 'hafas-client/p/db';
 
 import adjacencyList from '../static/stationGraph.json';
 
-const { journeys } = hafasClient(dbProfile, 'baahn');
+const { journeys } = createClient(dbProfile, 'baahn');
 
 /**
  * A journey with an extra attribute `trick`
