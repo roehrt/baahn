@@ -4,7 +4,7 @@ import hafasClient, {
 // @ts-ignore
 import dbProfile from 'hafas-client/p/db';
 
-import adjacencyList from './static/stationGraph.json';
+import adjacencyList from '../static/stationGraph.json';
 
 const { journeys } = hafasClient(dbProfile, 'baahn');
 
