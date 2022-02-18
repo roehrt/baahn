@@ -33,10 +33,10 @@
     "eslint": "^8.9.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^16.1.0",
-    "eslint-plugin-import": "^2.25.4"
+    "eslint-plugin-import": "^2.25.4",
+    "typescript": "^4.5.5"
   },
   "dependencies": {
-    "hafas-client": "^5.15.1",
-    "typescript": "^4.5.5"
+    "hafas-client": "^5.15.1"
   }
 }
