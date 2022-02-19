@@ -4,7 +4,7 @@ import createClient, {
 // @ts-ignore
 import dbProfile from 'hafas-client/p/db';
 
-import adjacencyList from '../static/stationGraph.json';
+import stationGraph from '../static/stationGraph.json';
 
 const { journeys } = createClient(dbProfile, 'baahn');
 
@@ -69,7 +69,7 @@ function hashLegs(legs: readonly Leg[]): BaahnJourneyHash {
  * @returns {BaahnStation[]} adjacent stations
  */
 function adjacentStations(station: BaahnStation): BaahnStation[] {
-  return (adjacencyList as StationGraph)[station] || [];
+  return (stationGraph as StationGraph)[station] || [];
 }
 
 /**
