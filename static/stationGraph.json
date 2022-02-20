@@ -1,5 +1,7 @@
 {
-  "__license_notice": "Der Datensatz basiert auf Daten der Deutschen Bahn AG.",
+  "__license_notice": [
+    "Der Datensatz basiert auf Daten der Deutschen Bahn AG."
+  ],
   "8000001": [
     "8000044",
     "8000084",
