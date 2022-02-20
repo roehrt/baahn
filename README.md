@@ -51,7 +51,12 @@ interface BaahnJourney extends Journey {
 ## Known Bugs
 There are some complications with the recognition of cheaper journeys
 caused by nearby/identical stations with different name, e.g. `Berlin Hbf`
-and `Berlin Hbf (tief)` and non-long-distance train stations. For further information visit the rather
+and `Berlin Hbf (tief)` and *non-long-distance* train stations. In fact if both - origin
+and destination - are non-long-distance stations the search will never respond with an improved
+price since the stations are missing in the adjacency list ([`stationGraph.json`](static/stationGraph.json)).
+Feel free to add them.
+
+For further information visit the rather
 spartan [FAQ](https://baahn.vercel.app/faq) (German).
 
 ## See Also
