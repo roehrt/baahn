@@ -6,8 +6,8 @@
   "types": "src/index.d.ts",
   "keywords": [
     "deutsche bahn",
-    "price",
-    "db"
+    "transit",
+    "germany"
   ],
   "scripts": {
     "lint": "eslint --fix --ext .ts .",
