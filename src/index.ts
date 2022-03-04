@@ -10,7 +10,7 @@ const { journeys } = createClient(dbProfile, 'baahn');
 
 /**
  * A journey with an extra attribute `trick`
- * which stores how the price saving was achieved
+ * storing how the price saving was achieved
  */
 export interface BaahnJourney extends Journey {
   trick?: {
@@ -26,7 +26,8 @@ export interface BaahnJourney extends Journey {
 export type BaahnStation = string;
 
 /**
- * An identifier representing a specific journey based on it's stops (and the time of the stops).
+ * An identifier representing a specific journey
+ * based on its stops (and the time of the stops).
  */
 type BaahnJourneyHash = string;
 
@@ -42,7 +43,7 @@ type BaahnJourneyMap = { [key: string]: BaahnJourney };
 type StationGraph = { [key: string]: BaahnStation[] };
 
 /**
- * Creates identifiable string from leg of a journey.
+ * Creates an identifiable string from leg of a journey.
  *
  * @param {Leg} leg - leg of journey
  * @returns {BaahnJourneyHash} hash
@@ -53,7 +54,7 @@ function hashLeg(leg: Leg): BaahnJourneyHash {
 }
 
 /**
- * Creates a hash from the legs of a journey.
+ * Creates a hash from legs of a journey.
  *
  * @param {Leg[]} legs - legs of journey
  * @returns {BaahnJourneyHash} hash
@@ -101,18 +102,18 @@ function update(journeyMap: BaahnJourneyMap, journey: BaahnJourney, from: BaahnS
   // Journey didn't contain the original connection
   if (legs.length === 0) return;
 
-  // Fetch current best journey
+  // Fetch the current best journey
   const hash = hashLegs(legs);
   const oldJourney = journeyMap[hash];
 
   // Journey not found
-  // TODO: maybe insert the journey into the map even if it's not originally there?!
+  // TODO: Insert the journey into the map even if it wasn't initially there?!
   if (!oldJourney || !oldJourney.price?.amount) return;
 
   // No price improvement
   if (oldJourney.price.amount <= (journey.price?.amount ?? Infinity)) return;
 
-  // Save how the money saving was achieved
+  // Store how the money saving was achieved
   journey.trick = {
     prepend,
     append,
@@ -123,7 +124,7 @@ function update(journeyMap: BaahnJourneyMap, journey: BaahnJourney, from: BaahnS
 }
 
 /**
- * Queries the original connection and possible longer/cheaper ones.
+ * Queries the original connection and possible longer and cheaper ones.
  *
  * @param {BaahnStation} from - origin of journey
  * @param {BaahnStation} to - destination of journey
@@ -153,7 +154,7 @@ function buildRequests(from: BaahnStation, to: BaahnStation, opt: JourneysOption
 }
 
 /**
- * Finds cheaper prices for given journey.
+ * Finds cheaper prices for a given journey.
  *
  * @param {BaahnStation} from - origin of journey
  * @param {BaahnStation} to - destination of journey
@@ -168,11 +169,12 @@ export async function findJourneys(
   opt: JourneysOptions = {},
 ): Promise<BaahnJourney[]> {
   if (opt.via) {
+    // TODO: Make via option available using multiple stopovers.
     // eslint-disable-next-line no-console
-    console.warn(`The 'via' option cannot be used. ${opt.via} was passed.`);
+    console.warn(`The 'via' option cannot be used. ${opt.via} was passed and ignored.`);
   }
 
-  // "via" option cannot be used
+  // 'via' option cannot be used
   opt.via = undefined;
 
   const requests = buildRequests(from, to, opt);
@@ -181,7 +183,7 @@ export async function findJourneys(
   if (connections.length === 0) return [];
   const originalConnection = connections.shift();
   if (!originalConnection?.status || originalConnection?.status === 'rejected') {
-    // There is no journey available
+    // There is no such journey available
     return [];
   }
 
