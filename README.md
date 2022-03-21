@@ -57,6 +57,7 @@ price since the stations are missing in the adjacency list ([`stationGraph.json`
 
 Feel free to add them via pull request but beware of the fact that a non-long-distance train
 station should only be adjacent to long-distance train stations (even if in between are only non-long-distance stations).
+[This edge list](https://gist.github.com/roehrt/46dc570f45f3c451460e5852d748142d) may help.
 
 For further information visit the rather
 spartan [FAQ](https://baahn.vercel.app/faq) (German).
