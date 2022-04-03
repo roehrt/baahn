@@ -1,6 +1,6 @@
 {
   "name": "@roehrt/baahn",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Javascript client for finding special cheaper connections for Deutsche Bahn journeys ",
   "main": "src/index.js",
   "types": "src/index.d.ts",
