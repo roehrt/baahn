@@ -1,5 +1,5 @@
 import createClient, {
-  Journey, Journeys, JourneysOptions, Leg,
+  Journey, Journeys, JourneysOptions, Leg, Station, Stop, Location,
 } from 'hafas-client';
 // @ts-ignore
 import dbProfile from 'hafas-client/p/db';
@@ -42,6 +42,12 @@ type BaahnJourneyMap = { [key: string]: BaahnJourney };
  */
 type StationGraph = { [key: string]: BaahnStation[] };
 
+function getStation(station: Station | Stop | Location | undefined): BaahnStation {
+  if (station === undefined) return '';
+  while ('station' in station && station.station !== undefined) station = station.station;
+  return station.id ?? JSON.stringify(station);
+}
+
 /**
  * Creates an identifiable string from leg of a journey.
  *
@@ -49,8 +55,8 @@ type StationGraph = { [key: string]: BaahnStation[] };
  * @returns {BaahnJourneyHash} hash
  */
 function hashLeg(leg: Leg): BaahnJourneyHash {
-  return `${leg.origin?.id}@${leg.plannedDeparture ?? leg.departure}>`
-        + `${leg.destination?.id}@${leg.plannedArrival ?? leg.arrival}`;
+  return `${getStation(leg.origin)}@${leg.plannedDeparture ?? leg.departure}>`
+        + `${getStation(leg.destination)}@${leg.plannedArrival ?? leg.arrival}`;
 }
 
 /**

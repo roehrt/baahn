@@ -49,15 +49,14 @@ interface BaahnJourney extends Journey {
 - `append` stores all legs that need to be **appended** to the original journey.
 
 ## Known Problems
-There are some complications with the recognition of cheaper journeys
-caused by nearby/identical stations with different name, e.g. `Berlin Hbf`
-and `Berlin Hbf (tief)` and _non-long-distance_ train stations. In fact if both - origin
-and destination - are non-long-distance stations the search will never respond with an improved
+`baahn` uses a graph of long-distance train stations, so it won't find many tricks if the origin or 
+destination is a _non_-long-distance station. In fact if both - origin
+and destination - are _non_-long-distance stations the search will never respond with an improved
 price since the stations are missing in the adjacency list ([`stationGraph.json`](static/stationGraph.json)).
 
-Feel free to add them via pull request but beware of the fact that a non-long-distance train
-station should only be adjacent to long-distance train stations (even if in between are only non-long-distance stations).
-[This edge list](https://gist.github.com/roehrt/46dc570f45f3c451460e5852d748142d) may help.
+The graph may be merged with
+[this edge list](https://gist.github.com/roehrt/46dc570f45f3c451460e5852d748142d)
+in the future.
 
 For further information visit the rather
 spartan [FAQ](https://baahn.vercel.app/faq) (German).
